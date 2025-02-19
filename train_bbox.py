@@ -473,12 +473,20 @@ def main():
         mp.spawn(
             main_worker,
             nprocs=args.world_size,
-            args=(args, )
+            args=(args, ),
         )
     else:
         random.seed(2023)
         np.random.seed(2023)
         torch.manual_seed(2023)
+        cur_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+        logging.basicConfig(
+            format='[%(asctime)s] - %(message)s',
+            datefmt='%Y/%m/%d %H:%M:%S',
+            level=logging.INFO,
+            filemode='w',
+            filename=os.path.join(LOG_OUT_DIR, f'output_{cur_time}.log'))
+
         # Load datasets
         dataloaders = get_dataloaders(args)
         # Build model
